@@ -21,14 +21,27 @@ cd djangoWEB
 2.  App 생성
 
 ```django
-python manage.py startapp HelloApp
+python manage.py startapp helloApp
 ```
+
+> djangoWEB의 settings.py에서 INSTALLED_APPS 에 helloApp을 추가해야 함
 
 3. Server 실행하는 명령어
 
 ```django
 python manage.py runserver
 ```
+
+4. 모델 --> DB(테이블)
+
+```python
+python manage.py makemigrations
+python manage.py migrate
+
+python manage.py createsuperuser  #개발자 모드 admin 입장 계정 만들기
+```
+
+
 
 ##### 사용자 입장에서 서버 형식 : http://localhost:8000/hello/index/
 
@@ -38,7 +51,7 @@ python manage.py runserver
 
 `웹 클라이언트`  -- Request --> url conf --> ```View``` -(CRUD)-> ```Model ```<-(ORM)- DB
 
-​                                                                                  -----------> ```Templates```
+​                           <-response                                    -----------> ```Templates```
 
 ​                          
 
@@ -49,15 +62,6 @@ python manage.py runserver
 * {%     %} : 동적코드 작성
 
 
-
-###### 모델 --> DB(테이블)
-
-```django
-python manage.py makemigrations
-python manage.py migrate
-
-python manage.py createsuperuser
-```
 
 
 
@@ -71,7 +75,7 @@ python manage.py createsuperuser
 
   > helloApp으로 이동하기 위한 경로 기재
 
-```django
+```python
 from django.contrib import admin
 from django.urls import path, include
 
@@ -83,11 +87,9 @@ urlpatterns = [
 
 
 
-
-
 * helloApp 의 **urls.py**
 
-```django
+```python
 from django.contrib import admin
 from django.urls import path, include
 from helloApp import views
@@ -102,9 +104,9 @@ urlpatterns = [
 
 * helloApp 의 **models.py**
 
-  > 모델을 만들 땐 models.Model을 꼭 상속해야 함
+  > 모델을 만들 땐 models.Model을 꼭 상속해야 DB와 연결 가능
 
-```django
+```python
 from django.db import models
 
 # Create your models here.
@@ -119,7 +121,7 @@ class TestUser(models.Model) :
 
 * helloApp의 **admin.py**
 
-```django
+```python
 from django.contrib import admin
 from .models import *
 
@@ -129,7 +131,9 @@ admin.site.register(TestUser)
 
 
 
-* http://127.0.0.1:8000/admin/ Django administration 에서 Test users 아이디, 비밀번호 생성
+* 서버를 끄고 (Ctrl+C),  모델 -> DB(테이블) 만드는 명령어 수행
+
+* 서버 띄우고, http://127.0.0.1:8000/admin/ Django administration(admin 입장 계정) 에서 Test users 아이디, 비밀번호 생성
 
   > DB 생성
 
@@ -139,7 +143,7 @@ admin.site.register(TestUser)
 
   > HttpResponse는 혼자 바로 응답, render는 템플릿 통해 응답
 
-```django
+```python
 from django.shortcuts import render, HttpResponse
 from .models import *
 
