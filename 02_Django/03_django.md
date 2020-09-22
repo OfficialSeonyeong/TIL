@@ -62,12 +62,16 @@ urlpatterns = [
     path('login/', views.login, name = 'login'),
     path('logout/', views.logout, name = 'logout'),
     path('bbs_list/', views.list, name = 'bbs_list'),
+    path('bbs_registerForm/', views.bbsRegisterForm, name = 'bbs_registerForm'),
+    path('bbs_register/', views.bbsRegister, name='bbs_register'),
+    path('bbs_read/<int:id>', views.bbsRead, name='bbs_read'),
+    path('bbs_remove/', views.bbsRemove, name='bbs_remove'),
 ]
 ```
 
 
 
-##### BbsApp 의 urls.py
+##### BbsApp 의 views.py
 
 ```python
 from django.shortcuts import render, redirect
@@ -77,6 +81,10 @@ from .models import *
 # Create your views here.
 
 def loginForm(request) :
+        if request.session.get('user_id'):
+        context = {'id':request.session['user_id'],
+                   'name':request.session['user_name'] }
+        return render(request, 'home.html', context)
     return render(request, 'login.html')
 
 def registerForm(request) :
@@ -119,6 +127,47 @@ def list(request) :
     print('boards result - ', type(boards), boards)
     context = {'boards': boards}
     return render(request, 'list.html', context)
+
+def bbsRegisterForm(request):
+    context = {'name': request.session['user_name'],
+               'id': request.session['user_id'] }
+    return render(request, 'bbsRegisterForm.html', context)
+
+def bbsRegister(request):
+    if request.method == 'GET':
+        return redirect('bbs_registerForm')
+    elif request.method == 'POST':
+        title = request.POST['title']
+        content = request.POST['content']
+        writer = request.POST['writer']
+
+        board = Bbs(title = title, content = content, writer = writer)
+        board.save()
+
+        return redirect('bbs_list')
+    
+def bbsRead(request, id) :
+    print('param - ', id)
+
+    read = Bbs.objects.get(id=id)
+
+    # viewcnt update
+    read.viewcnt = read.viewcnt + 1
+    read.save()
+
+    print('read result - ', read)
+    context = {'read': read,
+               'name': request.session['user_name'],
+               'id': request.session['user_id']}
+
+    return render(request, 'read.html', context)
+
+
+def bbsRemove(request):
+    id= request.POST['id']
+    Bbs.objects.get(id = id).delete()
+
+    return redirect('bbs_list')
 ```
 
 
@@ -171,7 +220,7 @@ class Bbs(models.Model):
 	{% for board in boards %}
 	<tr>
 		<td>{{board.id}}</td>
-		<td><a href="OOO">{{board.title}}</a></td>
+		<td><a href="{% url 'bbs_read' id=board.id %}">{{board.title}}</a></td>
 		<td>{{board.writer}}</td>
 		<td>{{board.regdate}}</td>
 		<td><span class="badge bg-red">{{board.viewcnt}}</span></td>
@@ -184,6 +233,79 @@ class Bbs(models.Model):
 	<p>데이터가 존재하지 않습니다.</p>
 {% endif %}
 
+...
+
+<script>
+	$(document).ready(function() {
+		$('#newBtn').click(function(){
+			// window.alert('click')
+			location.href = '../bbs_registerForm'
+		})
+	})
+
+</script>
+
+```
+
+
+
+##### BbsApp 의 read.html
+
+```html
+
+...
+
+<form role="form" method="post" id="removeFrm">
+	{% csrf_token %}
+	<input type='hidden' name='id' value="{{read.id}}">
+
+</form>
+
+<div class="box-body">
+	<div class="form-group">
+		<label for="exampleInputEmail1">Title</label> <input type="text"
+			name='title' class="form-control" value="{{ read.title }}"
+			readonly="readonly">
+	</div>
+	<div class="form-group">
+		<label for="exampleInputPassword1">Content</label>
+		<textarea class="form-control" name="content" rows="3"
+			readonly="readonly">{{ read.content }}</textarea>
+	</div>
+	<div class="form-group">
+		<label for="exampleInputEmail1">Writer</label> <input type="text"
+			name="writer" class="form-control" value="{{ read.writer }}"
+			readonly="readonly">
+	</div>
+</div>
+<!-- /.box-body -->
+
+<div class="box-footer">
+	{% if id == read.writer %}
+	<button type="submit" class="btn btn-warning">Modify</button>
+	<button type="submit" class="btn btn-danger">Remove</button>
+	{% endif %}
+	<button id= "listBtn" type="submit" class="btn btn-primary">LIST ALL</button>
+</div>
+
+
+<script>
+				
+$(document).ready(function(){
+	$('#listBtn').click(function(){
+		location.href = '../bbs_list' ;
+	})
+	$('.btn-danger').click(function(){
+		$('#removeFrm').attr('action', '../bbs_remove/');
+		$('#removeFrm').submit();
+	})
+});
+
+</script>
+
+...
+
+
 ```
 
 
@@ -194,7 +316,7 @@ class Bbs(models.Model):
 
 > 1. **HttpResponse()** : 바로 client에게 Response
 > 2. **render(request, templates, context)** 
->    * forward 방식 : templates 이동
+>    * forword 방식 : templates 이동
 >    * context에 데이터를 심으면 해당 url에서만 사용가능
 >    * cf) session에 심으면 여러 페이지에서 공유 가능
 > 3. **redirect()** : 새로운 request url 요청
