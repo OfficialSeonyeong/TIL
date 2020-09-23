@@ -66,6 +66,9 @@ urlpatterns = [
     path('bbs_register/', views.bbsRegister, name='bbs_register'),
     path('bbs_read/<int:id>', views.bbsRead, name='bbs_read'),
     path('bbs_remove/', views.bbsRemove, name='bbs_remove'),
+    path('bbs_modifyForm/', views.bbsModifyForm, name='bbs_modifyForm'),
+    path('bbs_modify/', views.bbsmodify, name='bbs_modify'),
+    path('bbs_search/', views.bbsSearch, name='bbs_search'),
 ]
 ```
 
@@ -168,7 +171,58 @@ def bbsRemove(request):
     Bbs.objects.get(id = id).delete()
 
     return redirect('bbs_list')
+
+def bbsModifyForm(request):
+   id= request.POST['id']
+   board = Bbs.objects.get(id=id)
+
+   content ={ 'board' : board,
+    'name': request.session['user_name'],
+    'id': request.session['user_id']
+   }
+
+   return render(request, 'modify.html', content)
+
+def bbsmodify(request):
+    id = request.POST['id']
+    print(id)
+    board = Bbs.objects.get(id=id)
+
+    board.title = request.POST['title']
+    board.content = request.POST['content']
+    board.save()
+
+    return redirect('bbs_list')
+
+def bbsSearch(request):
+    print('--------------- ajax json bbsSearch')
+    type = request.POST['type']
+    keyword = request.POST['keyword']
+    print('type: ',type, '/ keyword : ',keyword)
+
+    if type =='title':
+        boards = Bbs.objects.filter(title__startswith=keyword)
+        boards = Bbs.objects.filter(title__endswith=keyword)
+        boards = Bbs.objects.filter(title__icontains=keyword)
+    if type == 'writer':
+        boards = Bbs.objects.filter(writer__startswith=keyword)
+        boards = Bbs.objects.filter(writer__endswith=keyword)
+        boards = Bbs.objects.filter(writer__icontains=keyword)
+    print("ajax -- result : ", boards)
+
+    data =[]
+    for board in boards :
+        data.append({'id':board.id,
+                     'title': board.title,
+                     'writer': board.writer,
+                     'regdate': board.regdate,
+                     'viewcnt': board.viewcnt})
+
+    return JsonResponse(data, safe=False)
+    # return HttpResponse(json.dumps(dict), content_type='application/json')
 ```
+
+> ajax 와 json 사용 시, render(), redirect() 사용 불가
 
 
 
@@ -203,9 +257,30 @@ class Bbs(models.Model):
 
 
 
-##### BbsApp 의 list.html, table 파트
+##### BbsApp 의 list.html
 
 ```html
+
+...
+
+<div class='box'>
+				<div class="box-header with-border">
+					<h3 class="box-title">Board List</h3>
+				</div>
+				<div class='box-body'>
+					<select id="searchType">
+						<option value="title">제목</option>
+						<option value="writer">작성자</option>
+					</select>
+					<input type="text" id="searchKeyword">
+					<button id='searchBtn'>search Board</button>
+					<button id='newBtn'>New Board</button>
+				
+				</div>
+			</div>
+
+...
+
 {% if boards %}
 <table class="table table-bordered">
 	<tr>
@@ -238,9 +313,34 @@ class Bbs(models.Model):
 <script>
 	$(document).ready(function() {
 		$('#newBtn').click(function(){
-			// window.alert('click')
 			location.href = '../bbs_registerForm'
 		})
+        $('#searchBtn').click(function(){
+			//alert($('#searchType').val())
+			//alert($('#searchKeyword').val())
+			$('#tbody').empty()
+		// ajax 통신 - json
+			$.ajax({
+				url : "{% url 'bbs_search' %}",
+				type : "post",
+				dataType : "json",
+				data : {'csrfmiddlewaretoken': '{{csrf_token}}',
+						type : $('#searchType').val(),
+						keyword : $('#searchKeyword').val()},
+				success : function(data) {
+					var txt = "";
+				$.each(data , function(idx, obj) {
+					txt +="<tr><td>"+obj.id+"</td>" ;
+					txt +="<td><a href=../bbs_read/"+obj.id+">"+obj.title+"</a></td>";
+					txt +="<td>"+obj.writer+"</td>";
+					txt +="<td>"+obj.regdate+"</td>";
+					txt +="<td><span class='badge bg-red'>"+obj.viewcnt+"</span></td></tr>" ;
+				});
+				$("#tbody").append(txt);
+
+				}
+            })
+        })
 	})
 
 </script>
@@ -299,12 +399,72 @@ $(document).ready(function(){
 		$('#removeFrm').attr('action', '../bbs_remove/');
 		$('#removeFrm').submit();
 	})
+    $('.btn-warning').click(function(){
+		$('#removeFrm').attr('action', '../bbs_modifyForm/');
+		$('#removeFrm').submit();
+	})
 });
 
 </script>
 
 ...
 
+
+```
+
+
+
+##### BbsApp 의 modify.html
+
+```html
+
+...
+
+<form id="modifyFrm" role="form" method="post" action="{% url 'bbs_modify' %}">
+	<div class="box-body">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="exampleInputEmail1">ID</label> <input type="text"
+				name='id' class="form-control" value="{{ board.id }}"
+				readonly="readonly">
+		</div>
+
+		<div class="form-group">
+			<label for="exampleInputEmail1">Title</label> <input type="text"
+				name='title' class="form-control" value="{{ board.title }}">
+		</div>
+		<div class="form-group">
+			<label for="exampleInputPassword1">Content</label>
+			<textarea class="form-control" name="content" rows="3">{{ board.content }}</textarea>
+		</div>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Writer</label> <input
+				type="text" name="writer" class="form-control"
+				value="{{ board.writer }}"
+				readonly="readonly">
+		</div>
+	</div>
+	<!-- /.box-body -->
+</form>
+
+
+<div class="box-footer">
+	<button type="submit" class="btn btn-primary">MODIFY</button>
+	<button type="submit" class="btn btn-warning">CANCEL</button>
+</div>
+
+<script>
+	$(document).ready(function() {
+		$('.btn-primary').click(function(){
+			$('#modifyFrm').submit()
+		})
+		$('.btn-warning').click(function(){
+			location.href='../bbs_list'
+		})
+	});
+</script>
+
+...
 
 ```
 

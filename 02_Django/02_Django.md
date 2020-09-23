@@ -235,13 +235,13 @@ def result(request) :
 >     	modelName.objects.filter( Q(id= 1) | Q(pwd = 1) )
 > 
 > SQL) select * from table where subject like '%공지%' ;
->         modelName.objects.filter(subject_icontains='공지')
+>         modelName.objects.filter(subject__icontains='공지')
 > 
 > SQL) select * from table where subject like '공지%' ;
->     	modelName.objects.filter(subject_startswith='공지')
+>     	modelName.objects.filter(subject__startswith='공지')
 > 
 > SQL) select * from table where subject like '%공지' ;
->     	modelName.objects.filter(subject_endswith='공지')
+>     	modelName.objects.filter(subject__endswith='공지')
 > 
 > SQL) insert into table values ('') ;
 > 		model(변수 = value, 변수 = value ....)
