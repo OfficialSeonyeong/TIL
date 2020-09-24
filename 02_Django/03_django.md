@@ -69,6 +69,8 @@ urlpatterns = [
     path('bbs_modifyForm/', views.bbsModifyForm, name='bbs_modifyForm'),
     path('bbs_modify/', views.bbsmodify, name='bbs_modify'),
     path('bbs_search/', views.bbsSearch, name='bbs_search'),
+    path('csvToModel/', views.csvToModel, name='csvToModel'),
+    path('attachCsv/', views.csvUpload, name='attachCsv'),
 ]
 ```
 
@@ -220,6 +222,37 @@ def bbsSearch(request):
 
     return JsonResponse(data, safe=False)
     # return HttpResponse(json.dumps(dict), content_type='application/json')
+    
+def csvToModel(request):
+    path = 'c:/csv_multicam/seops.csv'
+    file = open(path)
+    reader = csv.reader(file)
+    print('----',reader)
+    list=[]
+    for row in reader:
+        print(row)
+        list.append(Seops(name=row[0], img=row[1], status=row[2]))
+
+    Seops.objects.bulk_create(list)
+    Seops.objects.values()
+    return HttpResponse('create model~~')
+
+def csvUpload(request):
+    file = request.FILES['csv_file']
+    print('------', file)
+    if not file.name.endswith('.csv'):
+        return redirect('loginForm')
+    result_file = file.read().decode('utf-8').splitlines()
+    print('result file', result_file)
+
+    reader = csv.reader(result_file)
+    list=[]
+    for row in reader:
+        print('-------', row)
+        list.append(Seops(name=row[0], img=row[1], status=row[2]))
+    file.close()
+    Seops.objects.bulk_create(list)
+    return redirect('loginForm')
 ```
 
 > ajax 와 json 사용 시, render(), redirect() 사용 불가
@@ -251,6 +284,14 @@ class Bbs(models.Model):
 
     def __str__(self):
         return self.title
+
+class Seops(models.Model):
+    name = models.CharField(max_length=50)
+    img = models.CharField(max_length=50)
+    status = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name+" & "+self.img+" & "+self.status
 ```
 
 > 이후, admin.py에 class명 등록과 DB테이블 형태로 바꾸는 명령어 수행
@@ -466,6 +507,39 @@ $(document).ready(function(){
 
 ...
 
+```
+
+
+
+##### BbsApp 의 home.html
+
+```html
+
+...
+
+			<div class="box box-primary">
+				<div class="box-header">
+					<h3 class="box-title">Home Page</h3>
+				</div>
+				<div class=""box-body">
+					<form method="post" action="{% url 'attachCsv' %}" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="form-group">
+							<label>.csv 파일 업로드해 주세요.</label>
+							<input type="file" class="form-control" name="csv_file">
+						</div>
+						<button type="submit" class="btn btn-info">등록</button>
+					</form>
+			</div>
+				<div class="'box-footer">
+					* 파일 업로드 *
+				</div>
+				<!-- /.box-header -->
+			</div>
+			<!-- /.box -->
+                      
+...
+                             
 ```
 
 
