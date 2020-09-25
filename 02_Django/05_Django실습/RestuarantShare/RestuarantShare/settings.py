@@ -27,6 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'tjdcnsgid96@khu.ac.kr'
+EMAIL_HOST_PASSWORD = 'xhfltkfkd1004'
 
 # Application definition
 
