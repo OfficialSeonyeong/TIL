@@ -1,4 +1,5 @@
-'''텍스트 파일 입출력
+'''
+텍스트 파일 입출력
 open(file ='절대경로/상대경로', mode ='')
 mode = r/w/a/wb
 '''
@@ -35,6 +36,7 @@ def withMultiWriteFile(fileName, mode) :
         for text in range(3) :
             inputMsg = input('문자열을 입력하세요: ')
             file.write('{}\n'.format(inputMsg))
+            # 텍스트 파일 내용 새로 작성
 
 def withListFile(fileName, mode, list):
     with open(fileName, mode, encoding='utf-8') as file :
@@ -61,6 +63,7 @@ def cntFunction() :
                 count += 1
         print(count)
 
+
 # 문자열이 저장된 special_words 파일에서 문자 'c'가 포함된 단어를 각 줄에 출력하는 프로그램
 # 단어를 출력할 때는 등장한 순서대로 출력하며, .은 출력하지않는다.
 def Special():
@@ -78,7 +81,7 @@ def Special():
 
 #zipcode.txt.
 # input함수를 이용하여 동 이름을 입력받아 해당되는 동의 주소를 출력
-#한줄씩 읽어서 tab키로 분리하고 startwith()함수로 이용하여 처리
+# 한줄씩 읽어서 tab키로 분리하고 startswith()함수로 이용하여 처리
 def Usingzipcode():
     try :
         dong = input('동을 입력하세요: ')

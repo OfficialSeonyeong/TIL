@@ -6,9 +6,9 @@
 # 반복문
 # //
 
-# str = 'jslim9413'
-# idx = len(str)// 2
-# print(str[idx])
+str = 'jslim9413'
+idx = len(str)// 2
+print(str[idx])
 
 # 특정 단어가 들어 왔을 때 이 단어가 회문인지 아닌지 검사하는 함수
 def isPalindrome() :
@@ -28,13 +28,13 @@ def reversedPalindrome() :
     if list(word) == list(reversed(word)):
         print(True)
 
-# def palindrome() :
-#     with open('./word/palindrome_words.txt', 'r', encoding='utf-8') as file:
-#         # lines = file.readlines()
-#         for word in file:
-#             for i in range(len(word)//2):
-#                 if word[i] == word[-1-i]:
-#                     print(word.strip('\n'))
+def palindrome() :
+    with open('../documents/palindrome_words.txt', 'r', encoding='utf-8') as file:
+        # lines = file.readlines()
+        for word in file:
+            for i in range(len(word)//2):
+                if word[i] == word[-1-i]:
+                    print(word.strip('\n'))
 
 def palindrome() :
     with open('./word/palindrome_words.txt', 'r', encoding='utf-8') as file:
@@ -50,9 +50,9 @@ def palindrome() :
 # he/ el/ ll/ lo
 
 # 2-gram
-# text = 'hello'
-# for i in range(len(text)-1) :
-#     print(text[i], text[i+1], sep=' ')
+text = 'hello'
+for i in range(len(text)-1) :
+    print(text[i], text[i+1], sep=' ')
 
 # 공백을 기준으로 문자열을 분리한다면 타입은 리스트가 됩니다.
 # 리스트 2-gram 현재 문자와 다음 문자를 출력하고 싶다면
@@ -74,12 +74,12 @@ for number, name in zip(number, name) :
 a = 'lim'
 b = [1,2,3]
 c = ('one','two','three')
-print(list(zip(a,b,c)))
-print(dict(zip(a,b)))
-print(set(zip(a,b,c)))
+print(list(zip(a,b,c)))  # [('l', 1, 'one'), ('i', 2, 'two'), ('m', 3, 'three')]
+print(dict(zip(a,b)))  # {'l': 1, 'i': 2, 'm': 3}
+print(set(zip(a,b,c)))  # {('m', 3, 'three'), ('l', 1, 'one'), ('i', 2, 'two')}
 
 # input 함수를 이용해서 문자열이 입력되면
-#예시) 'Python is a programming language that helps you work quickly'
+# 예시) 'Python is a programming language that helps you work quickly'
 # gram 할 숫자도 input 함수를 이용하여 입력받아
 # 예시) 3
 # 입력된 숫자에 해당하는 단어 단어 n-gram 을 튜플로 출력
