@@ -1,0 +1,20 @@
+가상환경 추가
+conda create -n bigdataEnv python=3.6
+
+가상환경 목록
+conda info --envs
+
+가상환경 활성화
+conda activate bigdataEnv
+
+가상환경 비활성화
+conda deactivate
+
+제거
+conda env remove -n bigdataEnv
+
+conda install jupyter notebook
+
+conda install tensorflow
+
+conda install numpy / pandas / seaborn
