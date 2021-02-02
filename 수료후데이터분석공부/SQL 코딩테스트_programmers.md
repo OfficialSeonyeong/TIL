@@ -1,0 +1,166 @@
+# SQL 코딩테스트_programmers
+
+
+
+### [SELECT]
+
+1. 모든 레코드 조회하기
+
+```sql
+SELECT *
+FROM ANIMAL_INS
+ORDER BY ANIMAL_ID;
+```
+
+
+
+2. 역순 정렬하기
+
+```sql
+SELECT NAME, DATETIME
+FROM ANIMAL_INS
+ORDER BY ANIMAL_ID DESC;
+```
+
+
+
+3. 아픈 동물 찾기
+
+```sql
+SELECT ANIMAL_ID, NAME
+FROM ANIMAL_INS
+WHERE INTAKE_CONDITION = 'Sick'
+ORDER BY ANIMAL_ID;
+```
+
+
+
+4. 어린 동물 찾기
+
+```sql
+SELECT ANIMAL_ID, NAME
+FROM ANIMAL_INS
+WHERE INTAKE_CONDITION != 'Aged'
+ORDER BY ANIMAL_ID;
+```
+
+
+
+5. 동물의 아이디와 이름
+
+```sql
+SELECT ANIMAL_ID, NAME
+FROM ANIMAL_INS
+ORDER BY ANIMAL_ID;
+```
+
+
+
+6. 여러 기준으로 정렬하기
+
+```sql
+SELECT ANIMAL_ID, NAME, DATETIME
+FROM ANIMAL_INS
+ORDER BY NAME, DATETIME DESC;
+```
+
+
+
+7. 상위 n개 레코드
+
+```sql
+SELECT NAME
+FROM (
+    SELECT *
+    FROM ANIMAL_INS
+    ORDER BY DATETIME
+)
+WHERE rownum = 1;
+```
+
+
+
+
+
+### [SUM, MAX, MIN]
+
+1. 최댓값 구하기
+
+```sql
+SELECT MAX(DATETIME) as 시간
+FROM ANIMAL_INS
+```
+
+
+
+2. 최솟값 구하기
+
+```sql
+SELECT MIN(DATETIME) 시간
+FROM ANIMAL_INS;
+```
+
+
+
+3. 동물 수 구하기
+
+```sql
+SELECT COUNT(*)
+FROM ANIMAL_INS;
+```
+
+
+
+4. 중복 제거하기
+
+```sql
+SELECT COUNT(*)
+FROM (
+    SELECT DISTINCT(NAME)
+    FROM ANIMAL_INS
+    WHERE NAME is not null
+);
+```
+
+```sql
+SELECT COUNT(DISTINCT NAME)
+FROM ANIMAL_INS
+# WHERE NAME IS NOT NULL
+```
+
+
+
+
+
+### [IS NULL]
+
+1. 이름이 없는 동물의 아이디
+
+```sql
+SELECT ANIMAL_ID
+FROM ANIMAL_INS
+WHERE NAME is null
+ORDER BY ANIMAL_ID;
+```
+
+
+
+2. 이름이 있는 동물의 아이디
+
+```sql
+SELECT ANIMAL_ID
+FROM ANIMAL_INS
+WHERE NAME is not null
+ORDER BY ANIMAL_ID;
+```
+
+
+
+3. NULL 처리하기
+
+```sql
+SELECT ANIMAL_TYPE, NVL(NAME, 'No name'), SEX_UPON_INTAKE
+FROM ANIMAL_INS
+ORDER BY ANIMAL_ID;
+```
+
