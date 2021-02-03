@@ -164,3 +164,45 @@ FROM ANIMAL_INS
 ORDER BY ANIMAL_ID;
 ```
 
+
+
+### [GROUP BY]
+
+1. 고양이와 개는 몇 마리 있을까
+
+```sql
+SELECT ANIMAL_TYPE, COUNT(ANIMAL_TYPE) as count
+FROM ANIMAL_INS
+WHERE ANIMAL_TYPE in ('Cat','Dog')
+GROUP BY ANIMAL_TYPE
+ORDER BY ANIMAL_TYPE;
+```
+
+
+
+2. 동명 동물 수 찾기
+
+```sql
+SELECT NAME, COUNT(NAME) as COUNT
+FROM ANIMAL_INS
+WHERE NAME is not null
+GROUP BY NAME
+HAVING COUNT(NAME) >= 2
+ORDER BY NAME;
+```
+
+
+
+3. 입양 시각 구하기(1)
+
+```sql
+SELECT hour, COUNT(*)
+FROM (
+    SELECT TO_CHAR(DATETIME, 'hh24') as hour
+    FROM ANIMAL_OUTS
+)
+GROUP BY hour
+HAVING hour between 9 and 20
+ORDER BY hour;
+```
+
