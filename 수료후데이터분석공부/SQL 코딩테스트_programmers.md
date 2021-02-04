@@ -206,3 +206,57 @@ HAVING hour between 9 and 20
 ORDER BY hour;
 ```
 
+
+
+4. 입양 시각 구하기(2)
+
+```sql
+SELECT L.hour, NVL(count, 0)
+FROM
+    (SELECT Level-1 as hour
+    FROM dual
+    CONNECT BY LEVEL <=24) L,
+    (SELECT TO_CHAR(DATETIME, 'hh24') as hour, COUNT(*) as count
+    FROM ANIMAL_OUTS
+    GROUP BY TO_CHAR(DATETIME, 'hh24')
+    ORDER BY hour) H
+WHERE L.hour = H.hour(+)
+ORDER BY L.hour;
+```
+
+
+
+### [JOIN]
+
+1. 없어진 기록 찾기
+
+```sql
+SELECT ANIMAL_ID, B.NAME
+FROM ANIMAL_INS A RIGHT OUTER JOIN ANIMAL_OUTS B USING (ANIMAL_ID)
+WHERE INTAKE_CONDITION IS NULL
+ORDER BY ANIMAL_ID;
+```
+
+```sql
+SELECT B.ANIMAL_ID, B.NAME
+FROM ANIMAL_INS A, ANIMAL_OUTS B
+WHERE A.ANIMAL_ID(+) = B.ANIMAL_ID
+AND INTAKE_CONDITION is null
+ORDER BY B.ANIMAL_ID;
+```
+
+
+
+### [String, Date]
+
+1. 루시와 엘라 찾기
+
+```sql
+SELECT ANIMAL_ID, NAME, SEX_UPON_INTAKE
+FROM ANIMAL_INS
+WHERE NAME in ('Lucy', 'Ella','Pickle','Rogan','Sabrina','Mitty')
+ORDER BY ANIMAL_ID
+```
+
+
+
