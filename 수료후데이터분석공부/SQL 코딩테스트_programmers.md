@@ -260,3 +260,42 @@ ORDER BY ANIMAL_ID
 
 
 
+2. 이름에 el이 들어가는 동물 찾기
+
+```sql
+SELECT ANIMAL_ID, NAME
+FROM ANIMAL_INS
+WHERE (NAME LIKE '%el%'
+OR NAME LIKE 'El%')
+AND ANIMAL_TYPE = 'Dog'
+ORDER BY NAME;
+```
+
+
+
+3. 중성화 여부 파악하기
+
+```sql
+SELECT ANIMAL_ID, NAME,
+    CASE
+    WHEN SEX_UPON_INTAKE LIKE 'Neutered%' THEN 'O'
+    WHEN SEX_UPON_INTAKE LIKE 'Spayed%' THEN 'O' 
+    ELSE 'X'
+    END AS 중성화
+FROM ANIMAL_INS
+ORDER BY ANIMAL_ID
+```
+
+
+
+4. 오랜 기간 보호한 동물(2)
+
+```sql
+SELECT id, name
+FROM
+    (SELECT A.NAME name, ANIMAL_ID id, MONTHS_BETWEEN(B.DATETIME, A.DATETIME) period
+    FROM ANIMAL_INS A INNER JOIN ANIMAL_OUTS B USING (ANIMAL_ID)
+    ORDER BY period DESC)
+WHERE rownum <=2;
+```
+
