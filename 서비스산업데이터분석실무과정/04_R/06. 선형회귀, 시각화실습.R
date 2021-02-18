@@ -318,3 +318,43 @@ ggplot(mtcars, aes(x=factor(cyl)))+ geom_bar(aes(fill=factor(gear))) + coord_pol
 
 #7. cyl열을 x축으로 지정하여 cyl별 gear 빈도 파악 원그래프
 ggplot(mtcars, aes(x=factor(cyl)))+geom_bar(aes(fill=factor(gear)))+coord_polar(theta='y')
+
+
+
+#시각화 마무리
+
+library(ggplot2)
+seoul_subway <- read.csv(file.choose())
+str(seoul_subway)
+head(seoul_subway)
+
+#x축을 평균일 승차인원으로 설정하고, y축을 각 노선의 운행횟수로 설정
+ggplot(seoul_subway, aes(x=AVG_ONEDAY, y=RUNNINGTIMES_WEEKDAYS))+
+  geom_point(aes(fill=AVG_CROWDEDNESS))
+
+ggplot(seoul_subway, aes(x=AVG_ONEDAY, y=RUNNINGTIMES_WEEKDAYS))+
+  geom_point(aes(col=LINE, size=AVG_CROWDEDNESS))
+
+ggplot(seoul_subway, aes(x=AVG_ONEDAY, y=RUNNINGTIMES_WEEKDAYS))+
+  geom_point()
+
+#x축 각 노선(LINE)으로 일평균 막대그래프를 만들어보자
+ggplot(seoul_subway, aes(x=LINE, y=AVG_ONEDAY))+geom_bar(stat='identity', aes(fill=LINE))
+
+ggplot(seoul_subway, aes(x=LINE, y=AVG_ONEDAY))+geom_bar(stat='identity')
+
+
+#mtcars
+head(mtcars)
+
+#차량별 연비를 가지고 시각화하려고 한다. 문제점 해결 rownames()로
+rownames(mtcars)
+mtcars$type <- rownames(mtcars)         
+ggplot(mtcars, aes(x=type, y=mpg))+geom_bar(stat='identity', aes(fill=type))+coord_flip()
+
+
+#reorder(type, mpg) type을 기준으로 오름차순 / reorder(type, -mpg) 내림차순
+ggplot(mtcars, aes(x=reorder(type, mpg), y=mpg))+geom_bar(stat='identity', aes(fill=type))+
+  theme(axis.text.x = element_text(angle = 90))
+carMpg <- ggplot(mtcars, aes(x=reorder(type, mpg), y=mpg))+geom_bar(stat='identity', aes(fill=type))+ coord_flip()
+carMpg+ labs(x='', y='연비', title='차량별 연비')
