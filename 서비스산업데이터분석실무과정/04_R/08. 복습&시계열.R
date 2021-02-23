@@ -90,29 +90,29 @@ dcast(Asian_mean, Var1~Var2)
 ggplot(Asian_mean, aes(x=Var2, y=Freq, fill=Var1))+geom_bar(stat='identity')+coord_flip()
 
 
---------------------------------------------
+
 # ggplot2의 midwest 데이터를 사용하여 데이터 분석을 실습하는 문제 입니다.
 
 # popadults는 해당 지역의 성인 인구, 
 # poptotal은 전체 인구를 나타냅니다. 
-
+str(midwest)
 # 1번 문제
 # midwest 데이터에 '전체 인구 대비 미성년 인구 백분율' 변수를 추가하세요.
-midwest_raw$전체_인구_대비_미성년_인구_백분율 <- percyoung/midwest_raw$poptotal*100
 percyoung <- midwest_raw$poptotal -midwest_raw$popadults
+midwest_raw$전체_인구_대비_미성년_인구_백분율 <- percyoung/midwest_raw$poptotal*100
 
 # 2번 문제
 # 미성년 인구 백분율이 가장 높은 상위 5개 county(지역)의 
 # 미성년 인구 백분율을 출력하시오.
 rownames(midwest_raw)
 
+midwest_order <- arrange(midwest_raw, desc(midwest_raw$전체_인구_대비_미성년_인구_백분율))
+
 rownames(midwest_order) <- as.numeric(rownames(midwest_order))
 ab <- rownames(midwest_order)
 class(ab)
 
 midwest_order$order <- rownames(midwest_order)
-
-midwest_order <- arrange(midwest_raw, desc(midwest_raw$전체_인구_대비_미성년_인구_백분율))
 
 midwest_order$order <- as.numeric(midwest_order$order)
 class(midwest_order$order)
@@ -131,6 +131,7 @@ midwest_order %>%
 # large    40%이상
 # middle   30 ~ 40미만
 # small    30미만
+
 midwest_raw$미성년비율등급 <- ifelse(midwest_raw$전체_인구_대비_미성년_인구_백분율 >=40, 'large',
                               ifelse(midwest_raw$전체_인구_대비_미성년_인구_백분율 <30, 'small', 'middle'))
 
@@ -141,7 +142,8 @@ table(midwest_raw$미성년비율등급)
 # '전체 인구 대비 아시아인 인구 백분율' 변수를 추가하고 
 # 하위 10개 지역의 state(주), county(지역), 아시아인 인구 백분율을 출력하세요.
 midwest_raw$아시아인백분율 <- midwest_raw$popasian/midwest_raw$poptotal
-
+a = arrange(midwest_raw, desc(midwest_raw$아시아인백분율))
+tail(a,10) %>% select(c(county,state))
 
 #시계열(time series) : 변수 간의 상관성
 #iris 시계열 데이터 만들기
@@ -166,9 +168,11 @@ iris_melt <- melt(iris_new, id.vars = c('seq', 'Species')) #다른버전에서 �
 library(ggplot2)
 g <- ggplot(iris_melt, aes(x=seq, y=value,col=variable)) + geom_line(cex=0.8, show.legend = T)
 
+
 #추가적으로 선의 색상 범례 라벨링
 g <- g + scale_color_manual( name='iris',values=colsColor[iris_melt$variable], 
                              labels=c('꽃받침 길이','꽃받침 넓이','꽃잎 길이','꽃입 너비'))
+
 
 #날짜: 문자변수를 날짜변수로 변환
 #R의 날짜 데이터 타입 'POSIXct'   as.POSIXct()
@@ -192,11 +196,11 @@ names(colsColor) <- names(dataset01)[2:6]
 dataset01_melt <- melt(dataset01, id=c('Date','Volume'))
 m <- ggplot(dataset01_melt, aes(x=Date, y=value, col=variable)) +geom_line(cex=0.8, show.legend = T)
 
+
 library(MASS)
 carDF <- Cars93
 str(carDF)
 rownames(carDF)
-
 
 
 
@@ -216,6 +220,7 @@ no_na_spanish <- na.omit(spanish)
 nrow(no_na_spanish)
 class(no_na_spanish)
 head(no_na_spanish)
+
 #결측치 확인방법
 dataset02[!complete.cases(dataset02),]
 
