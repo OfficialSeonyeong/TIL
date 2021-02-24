@@ -154,3 +154,42 @@ coffee_new2 <- coffee_new2 %>% filter(업태구분명 =='커피숍')
 #지역구에 따른 년도별 커피숍 인허가 정보를 요약해보자
 x <- coffee_new_shop %>% filter(인허가일자>'2000-01-01') %>% group_by(year(인허가일자),지역구) %>% summarise(n=n())
 View(x)
+
+
+dustdata <- read_excel(file.choose())
+library(readxl)
+
+head(dustdata)
+str(dustdata)
+View(dustdata)
+
+
+#로드한 데이터로부터 성북구와 중구의 미세먼지를 비교하고 시각화
+#비교할 지역 데이터만 추출하여 미세먼지 농도차이가 있는지 확인해보자
+library(dplyr)
+dust_district <- dustdata %>% filter(area=='성북구'| area=='중구')
+dustdata %>% filter(area %in% c('성북구','중구'))
+View(dust_district)
+
+library(ggplot2)
+ggplot(dust_district, aes(x=yyyymmdd, y=finedust, group=area, col= area))+ geom_line() +geom_point()
+
+# 현황 파악하기
+#yyyymmdd에 따른 데이터 수 파악(내림차순) -> count()함수 이용
+count(dust_district, yyyymmdd) 
+
+#area에 따른 데이터 수 파악(내림차순)
+count(dust_district, area)
+
+#지역에 따른 데이터를 변수에 각각 할당
+dust_seongbok <- dust_district %>% subset(area=='성북구')
+dust_jooggu <- dust_district %>% subset(area=='중구')
+
+summary(dust_seongbok$finedust)
+summary(dust_jooggu)
+
+ggplot(dust_district, aes(x=yyyymmdd, y=finedust, fill = area)) + geom_bar(stat='identity', position='dodge')
+boxplot(dust_seongbok$finedust, dust_jooggu$finedust, main='finedust_compare',xlab='AREA', names=c('성북구', '중구'), ylab='FINEDUST', col=c('blue','green'))
+
+#가설에 대한 검정
+t.test(data = dust_district, finedust ~ area, var.equal=T)
