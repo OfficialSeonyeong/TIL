@@ -17,9 +17,13 @@
 
 >  Languages: Python, R
 >
-> Web Skills: HTML, Django
+>  Web Skills: HTML, Django
 >
-> DB: SQL
+>  DB: SQL
+>
+>  Data Science: Pandas, Numpy
+>
+>  ML: sklearn, Spark
 
 
 
@@ -38,10 +42,20 @@
 ### [수료후데이터분석공부]
 
 * 과정 수료 이후 데이터분석 공부를 개인적으로 공부한다.
-* NLP 관련 데이터 연구원으로서 실력을 향상시키기 위한 노력을 하자.
 
-```자연어를 다루는 공부```
+1. Data Analysis - '파이썬으로 데이터 주무르기' 를 통한 Pandas, Numpy,  Crawling, NLP 공부
+2. SQL 코딩테스트_programmers
+3. Machine Learning
+4. 딥 러닝을 이용한 자연어 처리 입문 - https://wikidocs.net/book/2155 **tensorflow keras** 활용
+5. 처음부터 시작하는 딥러닝 유치원 - Fastcampus 강의, **pytorch** 활용
 
-```임베딩, 딥러닝```
 
-```서비스화를 위한 웹 공부```
+
+
+
+> [Work Experience]
+>
+> **NARA.AI Research Institute**
+>
+> NLP Scientist  2021.04.12 ~
+
