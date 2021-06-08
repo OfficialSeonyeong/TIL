@@ -63,3 +63,9 @@ jupyter notebook으로 실행
 ## 04. 실습 Linear Layer
 
 jupyter notebook으로 실행
+
+
+
+## 05. 실습 GPU 사용하기
+
+jupyter notebook으로 실행
