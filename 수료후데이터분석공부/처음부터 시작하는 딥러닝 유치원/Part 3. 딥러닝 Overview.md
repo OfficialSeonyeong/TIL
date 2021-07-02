@@ -86,7 +86,7 @@ $$
 ### Product
 
 $$
-\pi_{i=0}^n x_i
+\Pi_{i=0}^n x_i
 $$
 
 
