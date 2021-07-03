@@ -75,4 +75,6 @@ y = LeakyReLU(x) = \max(\alpha \times x, x), where \space 0\leq \alpha < 1.
 $$
 
 - 기울기 값에 따름.
+- gradient vanishing 문제를 어느정도 해결할 수 있다.
 
+- 하지만 무조건 Leaky ReLU가 좋은 것은 아니다.
