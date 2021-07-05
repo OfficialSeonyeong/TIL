@@ -78,3 +78,17 @@ $$
 - gradient vanishing 문제를 어느정도 해결할 수 있다.
 
 - 하지만 무조건 Leaky ReLU가 좋은 것은 아니다.
+
+
+
+## 06. 실습 Deep Regression
+
+jupyter notebook으로 실행
+
+
+
+## 07. Wrap-up
+
+- 비선형 데이터의 관계 또는 함수에 대해 근사 가능한 Deep Neural Networks
+- 하지만, 파라미터가 늘어남에 따른 최적화가 어렵다.
+- 여전히 같은 방법(gradient descent)을 통해 최적화한다. 하지만 DNN은 non-convex한 loss surface를 가진다.
