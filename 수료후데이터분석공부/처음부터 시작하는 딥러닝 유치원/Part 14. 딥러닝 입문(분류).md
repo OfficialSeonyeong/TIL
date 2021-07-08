@@ -77,3 +77,9 @@ jupyter notebook에서 진행
 
 - Accuracy는 Multi-class Classification에서 쓰기 충분하지 않다.
 - Confusion Matrix를 사용하면 어떤 class 사이의 추론 성능이 떨어지는지 쉽게 확인 & 대처 가능
+
+
+
+## 07. 실습 Deep Classification
+
+jupyter notebook에서 진행
