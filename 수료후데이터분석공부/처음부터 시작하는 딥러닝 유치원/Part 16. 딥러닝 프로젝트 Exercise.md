@@ -23,3 +23,64 @@
 - 데이터를 나눌 때 Test set은 따로 제작하기도 함
 - 네트워크 설계: 레이어의 크기, 깊이 등의 사소한 차이는 큰 성능의 변화를 이끌어내지 않는다. 일단 가장 기본적인 형태로 만들어 baseline 구성하는 것이 중요
 - 초기 모델 구조 선정 후 Valid Set으로 Hyper parameter Tuning
+
+
+
+## 03. 실습 브리핑
+
+- MNIST 데이터 활용하여 batch_norm 또는 dropout을 사용해 regulations
+- linear layer, LeakyReLU, LogSoftmax 사용( NLL Loss)
+- 실험을 반복해서 (동시에) 수행할 수 있어야 함
+- 모델 아키텍처가 바뀌어도 바로 동작할 수 있어야 함
+- hyper-param를 바꿔서 다양한 실험을 돌릴 수 있어야 함
+- 코드의 일부분이 수정되어도, 다른 부분은 큰 수정이 없도록 독립적으로 동작해야 함
+
+
+
+## 04. 실습 Classifier 구현하기
+
+visual studio code에서 진행
+
+
+
+## 05. 실습 Trainer 구현하기
+
+visual studio code에서 진행
+
+
+
+## 06. 실습 [train.py](http://train.py) 구현하기
+
+visual studio code에서 진행
+
+
+
+## 07. 실습 CLI 환경에서 실행하기
+
+앞 실습에서 만든 파일 prompt에서 진행
+
+```
+python train.py --model_fn ./model.pth --train_ratio 0.8 --batch_size 512 --n_layers 3 --verbose 1
+```
+
+
+
+## 08. 실습 predict.ipynb 구현하기
+
+jupyter notebook으로 진행
+
+
+
+## 09. Wrap-up
+
+부족한 점
+
+- 데이터 전처리/분할 등을 직접 구현
+- 여전히 custom for-loop에 의존
+- 많은 사람들(팀원들)이 동의할 수 있는 interface를 갖추지 못함
+
+개선할 점
+
+- PyTorch Dataset을 활용하자
+- 통용될 수 있는 interface를 갖추자
+- 따라서 PyTorch Ignite 또는 Lightning과 같은 라이브러리를 활용하자
