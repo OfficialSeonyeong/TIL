@@ -49,6 +49,7 @@
 4. 딥 러닝을 이용한 자연어 처리 입문 - https://wikidocs.net/book/2155 **tensorflow keras** 활용
 5. 처음부터 시작하는 딥러닝 유치원 - Fastcampus 강의, **pytorch** 활용
 6. Pytorch Tutorials - https://tutorials.pytorch.kr/  **pytorch**활용을 위한 코드 공부
+7. 딥러닝을 활용한 자연어처리 입문 - Fastcampus 강의, **pytorch** 활용
 
 
 
