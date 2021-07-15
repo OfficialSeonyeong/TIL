@@ -44,12 +44,11 @@
 * 과정 수료 이후 데이터분석 공부를 개인적으로 공부한다.
 
 1. Data Analysis - '파이썬으로 데이터 주무르기' 책을 통한 Pandas, Numpy,  Crawling, NLP 기초 공부
-2. SQL 코딩테스트_programmers
 3. Machine Learning - '파이썬 머신러닝 완벽 가이드' 책을 통한 머신러닝 공부, **sklearn** 활용
 4. 딥 러닝을 이용한 자연어 처리 입문 - https://wikidocs.net/book/2155 **tensorflow keras** 활용
-5. 처음부터 시작하는 딥러닝 유치원 - Fastcampus 강의, **pytorch** 활용
+5. [Lectures]처음부터 시작하는 딥러닝 유치원 - Fastcampus 강의, **pytorch** 활용
 6. Pytorch Tutorials - https://tutorials.pytorch.kr/  **pytorch**활용을 위한 코드 공부
-7. 딥러닝을 활용한 자연어처리 입문 - Fastcampus 강의, **pytorch** 활용
+7. [Lectures]딥러닝을 활용한 자연어처리 입문 - Fastcampus 강의, **pytorch** 활용
 
 
 
