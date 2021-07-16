@@ -1,5 +1,5 @@
 import torch
-from torch._C import FloatTensor
+
 from torch.utils.data import Dataset, DataLoader, dataset
 
 class MnistDataset(Dataset):
