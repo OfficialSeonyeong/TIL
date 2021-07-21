@@ -5,6 +5,14 @@ def set_parameter_requires_grad(model, freeze):
     for param in model.parameters():
         param.requires_grad = not freeze
 
+
+'''
+Three methods
+1. Set seed weights and train as normal
+2. Fix loaded weights (freeze) and train unloaded parts
+3. Train with different learning rate on each part
+'''
+
 def get_model(config):
     # You can also refer: 
     # - https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
@@ -16,8 +24,8 @@ def get_model(config):
         model = models.resnet34(pretrained=config.use_pretrained)
         set_parameter_requires_grad(model, config.freeze)
 
-        n_features = model.fc.in_features
-        model.fc == nn.Linear(n_features, config.n_classes)
+        n_features = model.fc.in_features # 이전의 레이어
+        model.fc == nn.Linear(n_features, config.n_classes) # 새로운 레이어 추가
         input_size = 224
 
     elif config.model_name == 'alexnet':
@@ -35,7 +43,7 @@ def get_model(config):
         n_features = model.classifier[-1].in_features
         model.classifier[-1] = nn.Linear(n_features, config.n_classes)
         input_size = 224
-        
+
     elif config.model_name == "squeezenet":
         model = models.squeezenet1_0(pretrained=config.use_pretrained)
         set_parameter_requires_grad(model, config.freeze)
