@@ -52,11 +52,3 @@
 
 
 
-
-
-> [Work Experience]
->
-> **NARA.AI Research Institute**
->
-> NLP Scientist  2021.04.12 ~
-
